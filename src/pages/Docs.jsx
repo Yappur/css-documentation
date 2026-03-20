@@ -1,6 +1,6 @@
 // El slug de la URL determina qué archivo .md se muestra.
 import { useParams } from "react-router-dom";
-import Sidebar from "../components/docs/SideBar";
+import Sidebar from "../components/docs/Sidebar";
 import DocContent from "../components/docs/DocContent";
 import Navbar from "../components/Navbar";
 

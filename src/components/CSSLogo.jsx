@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
+import { SkeletonUtils } from "three-stdlib";
 import * as THREE from "three";
 
 const AUTO_ROTATION_SPEED = 0.004;
@@ -53,60 +54,76 @@ function useDragRotation() {
   return { velocityRef, isDragging, isManual };
 }
 
+function normalizeScene(scene) {
+  scene.updateMatrixWorld(true);
+
+  const box = new THREE.Box3().setFromObject(scene);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z);
+
+  if (maxDim === 0) return; // modelo vacío, salimos
+
+  const s = 1 / maxDim;
+  scene.scale.setScalar(s);
+  scene.position.set(-center.x * s, -center.y * s, -center.z * s);
+
+  scene.traverse((child) => {
+    if (!child.isMesh) return;
+    child.castShadow = true;
+    child.receiveShadow = true;
+    const fix = (mat) => {
+      if (!mat) return;
+      mat.side = THREE.DoubleSide;
+      mat.envMapIntensity = 1.5;
+      mat.needsUpdate = true;
+    };
+    Array.isArray(child.material)
+      ? child.material.forEach(fix)
+      : fix(child.material);
+  });
+}
+
 export default function CSSLogo() {
   const groupRef = useRef();
   const timeRef = useRef(0);
-  // ── FIX DOBLE EJECUCIÓN ───────────────────────────────────
-  // React StrictMode en dev ejecuta useEffect dos veces.
-  // Este ref actúa como guardia: si ya aplicamos el fix, no lo
-  // volvemos a aplicar sobre el modelo ya transformado.
-  const fixApplied = useRef(false);
+  // Guardamos el clon en un ref para poder hacer dispose al desmontar
+  const cloneRef = useRef(null);
 
-  const { scene } = useGLTF("/css-logo.glb");
+  // ── Cargamos el modelo ────────────────────────────────────
+  // useGLTF suspende el render hasta que el .glb esté listo,
+  // así que cuando este componente ejecuta, scene YA existe.
+  const { scene: originalScene } = useGLTF("/css-logo.glb");
 
+  // ── Clonamos usando SkeletonUtils ─────────────────────────
+  // SkeletonUtils.clone es el método recomendado por three-stdlib
+  // para clonar modelos que pueden tener skeletons/bones.
+  // three-stdlib ya viene instalado con @react-three/drei.
+  // Hacemos el clon fuera de useEffect para que esté disponible
+  // en el primer render — esto evita el flash de "logo invisible".
+  if (!cloneRef.current) {
+    const clone = SkeletonUtils.clone(originalScene);
+    normalizeScene(clone);
+    cloneRef.current = clone;
+  }
+
+  // ── Cleanup al desmontar ──────────────────────────────────
   useEffect(() => {
-    if (!scene) return;
-    // Si ya aplicamos el fix en este mount, salimos
-    if (fixApplied.current) return;
-    fixApplied.current = true;
-
-    // Forzar actualización de matrices del modelo
-    scene.updateMatrixWorld(true);
-
-    // Medir tamaño real del modelo sin transformar
-    const box = new THREE.Box3().setFromObject(scene);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
-
-    console.log("[Fix] Tamaño original:", size);
-    console.log("[Fix] Centro original:", center);
-
-    // Normalizar: el lado más largo = 1 unidad
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const s = 1 / maxDim;
-
-    // Reset completo antes de aplicar transformaciones
-    scene.scale.setScalar(s);
-    scene.position.set(-center.x * s, -center.y * s, -center.z * s);
-
-    console.log("[Fix] Escala aplicada:", s);
-
-    // Arreglar materiales
-    scene.traverse((child) => {
-      if (!child.isMesh) return;
-      child.castShadow = true;
-      child.receiveShadow = true;
-      const fix = (mat) => {
-        if (!mat) return;
-        mat.side = THREE.DoubleSide;
-        mat.envMapIntensity = 1.5;
-        mat.needsUpdate = true;
-      };
-      Array.isArray(child.material)
-        ? child.material.forEach(fix)
-        : fix(child.material);
-    });
-  }, [scene]);
+    return () => {
+      if (!cloneRef.current) return;
+      cloneRef.current.traverse((child) => {
+        if (child.isMesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material?.dispose();
+          }
+        }
+      });
+      cloneRef.current = null;
+    };
+  }, []);
 
   const { velocityRef, isDragging, isManual } = useDragRotation();
 
@@ -115,11 +132,7 @@ export default function CSSLogo() {
     const g = groupRef.current;
     timeRef.current += delta;
 
-    // Flotación: el 0 es el centro vertical de la pantalla.
-    // Ajustá el primer número si el logo no está centrado:
-    //   positivo = sube, negativo = baja
-    g.position.y =
-      0 + Math.sin(timeRef.current * FLOAT_SPEED) * FLOAT_AMPLITUDE;
+    g.position.y = Math.sin(timeRef.current * FLOAT_SPEED) * FLOAT_AMPLITUDE;
 
     if (isDragging.current) {
       g.rotation.y += velocityRef.current;
@@ -137,11 +150,11 @@ export default function CSSLogo() {
     g.rotation.x = Math.sin(timeRef.current * 0.4) * 0.04;
   });
 
+  if (!cloneRef.current) return null;
+
   return (
-    // position={[0, 0, 0]} → centrado en la escena
-    // scale={2} → tamaño visual (ajustá si es muy chico/grande)
-    <group ref={groupRef} position={[0, 0, 0]} scale={2}>
-      <primitive object={scene} />
+    <group ref={groupRef} scale={2} rotation={[0, 4.3708, 0]}>
+      <primitive object={cloneRef.current} />
       <pointLight
         position={[0, 0, 2]}
         intensity={1.0}
