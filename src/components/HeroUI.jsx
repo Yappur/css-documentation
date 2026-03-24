@@ -8,7 +8,7 @@ export default function HeroUI() {
       <div className="flex-1 flex flex-col md:flex-row">
         {/* MOBILE: texto ocupa lo que necesita, sin padding exagerado */}
         {/* DESKTOP: columna izquierda, centrada verticalmente */}
-        <div className="flex flex-col justify-center px-10 pt-24 pb-6 md:py-0 md:px-16 md:flex-1 md:max-w-xl">
+        <div className="flex flex-col justify-center items-center text-center md:items-start md:text-left px-6 md:px-16 pt-24 pb-6 md:py-0 md:flex-1 md:max-w-xl">
           <div className="opacity-0-init animate-fade-up delay-100 mb-5">
             <span className="inline-flex items-center gap-2 text-xs font-body font-medium text-[#264de4] uppercase tracking-widest border border-[#264de4]/30 rounded-full px-4 py-1.5 bg-[#264de4]/5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#264de4] animate-pulse" />
@@ -54,9 +54,9 @@ export default function HeroUI() {
         </div>
       </div>
 
-      {/* ── Footer ── */}
-      <footer className="flex items-end justify-between px-10 pb-6 opacity-0-init animate-fade-up delay-500 pointer-events-none tracking-widest uppercase">
-        <span className="text-white/80 text-xs">
+      {/*  Footer*/}
+      <footer className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 md:px-10 pb-6 opacity-0-init animate-fade-up delay-500 pointer-events-none tracking-widest uppercase">
+        <span className="text-white/80 text-xs text-center md:text-left">
           Hecho con 💙 por{" "}
           <a
             href="https://www.linkedin.com/in/mateoyapur/"
@@ -67,7 +67,8 @@ export default function HeroUI() {
             Mateo Yapur
           </a>
         </span>
-        <div className="pointer-events-auto flex items-center gap-3">
+
+        <div className="pointer-events-auto flex justify-center md:justify-end">
           <Link
             to="/docs"
             className="inline-flex items-center gap-2 px-5 py-3 duration-200 text-white rounded-2xl border border-blue-400/40 shadow-md shadow-blue-400/20 hover:border-blue-400/70 hover:shadow-lg hover:shadow-blue-400/30 text-sm transition-colors group"
