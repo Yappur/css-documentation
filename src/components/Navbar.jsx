@@ -85,14 +85,13 @@ export default function Navbar({ transparent = false }) {
         transition-all duration-300
         ${
           transparent
-            ? // Hero: fondo transparente con blur leve
-              "bg-black/20 backdrop-blur-sm border-b border-white/[0.06]"
-            : // Docs: fondo sólido oscuro
-              "bg-[#0a0a0a] border-b border-white/[0.06]"
+            ? 
+              "bg-black/20 backdrop-blur-sm border-b border-white/6"
+            : 
+              "bg-[#0a0a0a] border-b border-white/6"
         }
       `}
       >
-        {/* ── Logo ─────────────────────────────────────── */}
         <Link to="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="flex items-center gap-2 opacity-0-init animate-fade-up delay-100">
             <div className="w-2 h-2 rounded-full bg-[#264de4]" />
@@ -112,8 +111,8 @@ export default function Navbar({ transparent = false }) {
                 px-3 py-1.5 rounded-md text-sm transition-colors duration-150
                 ${
                   isActive(link.to)
-                    ? "text-white bg-white/[0.08]"
-                    : "text-white/45 hover:text-white/80 hover:bg-white/[0.04]"
+                    ? "text-white bg-white/8"
+                    : "text-white/45 hover:text-white/80 hover:bg-white/4"
                 }
               `}
               >
@@ -133,13 +132,12 @@ export default function Navbar({ transparent = false }) {
                 rel="noopener noreferrer"
                 className="
                 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm
-                text-white/35 hover:text-white/70 hover:bg-white/[0.04]
+                text-white/35 hover:text-white/70 hover:bg-white/4
                 transition-colors duration-150
               "
               >
                 {link.icon}
                 {link.label}
-                {/* Ícono de link externo */}
                 <svg
                   width="10"
                   height="10"
@@ -158,9 +156,8 @@ export default function Navbar({ transparent = false }) {
             ))}
           </div>
 
-          {/* ── Botón derecho + hamburguesa (mobile) ─────── */}
+          {/*hamburguesa */}
           <div className="flex items-center gap-3">
-            {/* Hamburguesa en mobile */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden text-white/50 hover:text-white transition-colors p-1"
@@ -172,12 +169,11 @@ export default function Navbar({ transparent = false }) {
         </div>
       </nav>
 
-      {/* ── Menú mobile desplegable ───────────────────────── */}
       {menuOpen && (
         <div
           className="
           fixed top-14 left-0 right-0 z-40
-          bg-[#0a0a0a] border-b border-white/[0.06]
+          bg-[#0a0a0a] border-b border-white/6
           px-6 py-4 flex flex-col gap-1
           md:hidden
         "
@@ -192,7 +188,7 @@ export default function Navbar({ transparent = false }) {
                 px-3 py-2.5 rounded-md text-sm transition-colors
                 ${
                   isActive(link.to)
-                    ? "text-white bg-white/[0.08]"
+                    ? "text-white bg-white/8"
                     : "text-white/50 hover:text-white"
                 }
               `}
@@ -201,7 +197,7 @@ export default function Navbar({ transparent = false }) {
             </Link>
           ))}
 
-          <div className="h-px bg-white/[0.06] my-2" />
+          <div className="h-px bg-white/6 my-2" />
 
           {/* Links externos */}
           {EXTERNAL_LINKS.map((link) => (

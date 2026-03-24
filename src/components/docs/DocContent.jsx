@@ -17,12 +17,12 @@ const DOCS = {
 
 const MD_COMPONENTS = {
   h1: ({ children }) => (
-    <h1 className="text-3xl font-bold text-white mt-0 mb-4 pb-4 border-b border-white/[0.08]">
+    <h1 className="text-3xl font-bold text-white mt-0 mb-4 pb-4 border-b border-white/8">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="text-xl font-semibold text-white mt-10 mb-4 pb-2 border-b border-white/[0.06]">
+    <h2 className="text-xl font-semibold text-white mt-10 mb-4 pb-2 border-b border-white/6">
       {children}
     </h2>
   ),
@@ -37,7 +37,7 @@ const MD_COMPONENTS = {
   code: ({ inline, className, children }) => {
     if (inline) {
       return (
-        <code className="px-1.5 py-0.5 rounded bg-white/[0.08] text-[#7dd3fc] text-[13px] font-mono">
+        <code className="px-1.5 py-0.5 rounded bg-white/8 text-[#7dd3fc] text-[13px] font-mono">
           {children}
         </code>
       );
@@ -45,7 +45,7 @@ const MD_COMPONENTS = {
     return <code className={`${className} block`}>{children}</code>;
   },
   pre: ({ children }) => (
-    <pre className="bg-[#161616] border border-white/[0.08] rounded-lg p-5 overflow-x-auto mb-6 text-[13px] font-mono leading-6">
+    <pre className="bg-[#161616] border border-white/8 rounded-lg p-5 overflow-x-auto mb-6 text-[13px] font-mono leading-6">
       {children}
     </pre>
   ),
@@ -66,7 +66,7 @@ const MD_COMPONENTS = {
     </li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-[#264de4] bg-[#264de4]/[0.06] px-5 py-3 rounded-r-lg mb-4">
+    <blockquote className="border-l-2 border-[#264de4] bg-[#264de4]/6 px-5 py-3 rounded-r-lg mb-4">
       <div className="text-white/70 text-[14px] leading-6 [&>p]:mb-0 [&>p]:text-white/70">
         {children}
       </div>
@@ -78,7 +78,7 @@ const MD_COMPONENTS = {
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="border-b border-white/[0.1]">{children}</thead>
+    <thead className="border-b border-white/10">{children}</thead>
   ),
   th: ({ children }) => (
     <th className="text-left py-2 px-4 text-white/50 text-[11px] uppercase tracking-wider font-medium">
@@ -86,7 +86,7 @@ const MD_COMPONENTS = {
     </th>
   ),
   td: ({ children }) => (
-    <td className="py-2.5 px-4 text-white/60 text-[14px] border-b border-white/[0.04]">
+    <td className="py-2.5 px-4 text-white/60 text-[14px] border-b border-white/4">
       {children}
     </td>
   ),
@@ -100,7 +100,7 @@ const MD_COMPONENTS = {
       {children}
     </a>
   ),
-  hr: () => <hr className="border-white/[0.06] my-8" />,
+  hr: () => <hr className="border-white/6 my-8" />,
   strong: ({ children }) => (
     <strong className="text-white font-semibold">{children}</strong>
   ),
@@ -109,14 +109,14 @@ const MD_COMPONENTS = {
 function LoadingSkeleton() {
   return (
     <div className="animate-pulse space-y-4 max-w-3xl">
-      <div className="h-8 bg-white/[0.06] rounded w-2/3" />
-      <div className="h-px bg-white/[0.06]" />
+      <div className="h-8 bg-white/6 rounded w-2/3" />
+      <div className="h-px bg-white/6" />
       <div className="space-y-2 pt-2">
-        <div className="h-4 bg-white/[0.04] rounded w-full" />
-        <div className="h-4 bg-white/[0.04] rounded w-5/6" />
-        <div className="h-4 bg-white/[0.04] rounded w-4/6" />
+        <div className="h-4 bg-white/4 rounded w-full" />
+        <div className="h-4 bg-white/4 rounded w-5/6" />
+        <div className="h-4 bg-white/4 rounded w-4/6" />
       </div>
-      <div className="h-32 bg-white/[0.04] rounded-lg mt-4" />
+      <div className="h-32 bg-white/4 rounded-lg mt-4" />
     </div>
   );
 }

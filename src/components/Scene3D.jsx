@@ -1,5 +1,5 @@
-import { Suspense, useEffect, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useState, useRef } from "react";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { Environment, ContactShadows, AdaptiveDpr } from "@react-three/drei";
 import CSSLogo from "./CSSLogo";
 
@@ -38,15 +38,36 @@ function ResponsiveCamera() {
   return null;
 }
 
+function ReadySignal({ onReady }) {
+  const fired = useRef(false);
+  useFrame(() => {
+    if (!fired.current) {
+      fired.current = true;
+      onReady();
+    }
+  });
+  return null;
+}
+
 export default function Scene3D() {
+  const [isReady, setIsReady] = useState(false);
   return (
-    <div className="w-full h-full cursor-grab" style={{ overflow: "hidden" }}>
+    <div
+      className="w-full h-full cursor-grab"
+      style={{
+        overflow: "hidden",
+        opacity: isReady ? 1 : 0,
+        transition: "opacity 0.5s ease",
+      }}
+    >
       <Canvas
         camera={{ fov: 25, position: [0, 0, 7] }}
         shadows
-        gl={{ antialias: true, toneMappingExposure: 1.4 }}
+        gl={{ antialias: true, toneMappingExposure: 1.4, alpha: true }}
+        style={{ background: "transparent" }}
         dpr={[1, 2]}
       >
+        <ReadySignal onReady={() => setIsReady(true)} />
         <AdaptiveDpr pixelated />
         <ResponsiveCamera />
 
