@@ -172,7 +172,7 @@ const Tools = () => {
     <div className="relative w-full bg-[#0f0f0f] text-white">
       <Navbar transparent />
 
-      <section className="border-b-2 border-blue-400/40 py-16 text-center sm:py-24 bg-gradient-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]">
+      <section className="border-b-2 border-blue-400/40 pt-16 pb-8 text-center sm:pt-24 sm:pb-14 bg-linear-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Herramientas CSS
@@ -183,7 +183,7 @@ const Tools = () => {
           </p>
 
           {/* Search Bar */}
-          <div className="relative mx-auto mt-6 max-w-lg">
+          <div className="relative mx-auto mt-6 max-w-xs border-2">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"

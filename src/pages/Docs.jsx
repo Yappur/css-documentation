@@ -14,7 +14,7 @@ export default function Docs() {
   const currentSlug = slug || "introduccion";
 
   return (
-    <div className="flex flex-col h-screen bg-[#0f0f0f] text-white overflow-hidden">
+    <div className="flex flex-col h-screen bg-linear-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f] text-white overflow-hidden">
       {/* Navbar ocupa su h-14, el resto se divide en sidebar + contenido */}
       <Navbar />
 
