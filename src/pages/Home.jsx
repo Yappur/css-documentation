@@ -8,7 +8,7 @@ export default function Home() {
     <div className="relative w-full min-h-screen bg-[#0a0a0a]">
       {/* transparent=true → fondo con blur, no sólido */}
       <Navbar transparent />
-      <Scene3D />
+
       <HeroUI />
     </div>
   );

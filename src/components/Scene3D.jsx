@@ -1,11 +1,8 @@
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense, useEffect, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, ContactShadows, AdaptiveDpr } from "@react-three/drei";
 import CSSLogo from "./CSSLogo";
 
-// ── Fallback mientras el .glb carga ──────────────────────────
-// Mientras useGLTF descarga el archivo, Suspense muestra esto.
-// Es un cubo azul simple como placeholder.
 function LogoFallback() {
   return (
     <mesh>
@@ -15,19 +12,43 @@ function LogoFallback() {
   );
 }
 
+function ResponsiveCamera() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 1060) {
+        // Mobile: logo más chico para que quepa bien
+        camera.fov = 38;
+        camera.position.z = 7;
+      } else {
+        // Desktop: logo grande, ocupa la mitad derecha
+        camera.fov = 28;
+        camera.position.z = 7;
+      }
+      camera.updateProjectionMatrix();
+    };
+
+    update(); // ejecutar al montar
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [camera]);
+
+  return null;
+}
+
 export default function Scene3D() {
   return (
-    <div className="absolute inset-0 cursor-grab">
+    <div className="w-full h-full cursor-grab" style={{ overflow: "hidden" }}>
       <Canvas
-        camera={{ fov: 45, position: [0, 0, 7] }}
+        camera={{ fov: 25, position: [0, 0, 7] }}
         shadows
-        gl={{
-          antialias: true,
-          toneMappingExposure: 1.4,
-        }}
+        gl={{ antialias: true, toneMappingExposure: 1.4 }}
         dpr={[1, 2]}
       >
         <AdaptiveDpr pixelated />
+        <ResponsiveCamera />
 
         <ambientLight intensity={0.2} />
         <directionalLight
@@ -52,9 +73,6 @@ export default function Scene3D() {
 
         <Environment preset="studio" environmentIntensity={0.5} />
 
-        {/* Suspense es OBLIGATORIO para useGLTF.
-            Sin esto React tira un error porque useGLTF
-            "suspende" el render mientras carga el archivo. */}
         <Suspense fallback={<LogoFallback />}>
           <CSSLogo />
         </Suspense>

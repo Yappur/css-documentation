@@ -172,7 +172,7 @@ const Tools = () => {
     <div className="relative w-full bg-[#0f0f0f] text-white">
       <Navbar transparent />
 
-      <section className="border-b-2 border-blue-400/40 pt-16 pb-8 text-center sm:pt-24 sm:pb-14 bg-linear-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]">
+      <section className="border-b-2 border-blue-400/40 shadow-md shadow-blue-400/20 pt-22 pb-8 text-center sm:pt-24 sm:pb-14 bg-linear-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Herramientas CSS
@@ -183,14 +183,14 @@ const Tools = () => {
           </p>
 
           {/* Search Bar */}
-          <div className="relative mx-auto mt-6 max-w-xs border-2">
+          <div className="relative mx-auto mt-6 max-w-xs border-2 border-white/70">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
               placeholder="Buscar herramientas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 rounded-xl border-border bg-card pl-11 pr-4 text-base shadow-sm transition-shadow focus:shadow-md"
+              className="h-12 bg-card pl-11 pr-4 text-base shadow-sm transition-shadow focus:outline-none"
             />
           </div>
         </div>
@@ -213,10 +213,10 @@ const Tools = () => {
                     <button
                       key={category.id}
                       onClick={() => setActiveCategory(category.id)}
-                      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+                      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors cursor-pointer ${
                         isActive
-                          ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                          ? "text-white bg-white/[0.08]"
+                          : "text-white/70 hover:text-white/80 hover:bg-white/[0.04]"
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -231,7 +231,7 @@ const Tools = () => {
           {/* Tools Grid */}
           <div className="flex-1">
             <div className="mb-6 flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-sm tracking-[0.3em] uppercase">
                 {toolCount}{" "}
                 {toolCount === 1
                   ? "herramienta encontrada"
@@ -247,7 +247,7 @@ const Tools = () => {
                     href={tool.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col rounded-xl border border-border bg-card p-5 transition-all duration-200 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
+                    className="group relative flex flex-col rounded-xl border border-border bg-card p-5 transition-all duration-200 border-blue-400/40 shadow-md shadow-blue-400/20 hover:border-blue-400/70 hover:shadow-lg hover:shadow-blue-400/30"
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <h3 className="font-semibold text-card-foreground group-hover:text-primary transition-colors">
