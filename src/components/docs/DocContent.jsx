@@ -1,27 +1,13 @@
-// ─────────────────────────────────────────────────────────────
-// DocContent.jsx — Renderiza el archivo markdown del slug actual
-//
-// Flujo:
-//   1. Recibe el slug ("flexbox", "grid", etc.)
-//   2. Importa dinámicamente el archivo .md correspondiente
-//   3. Lo renderiza con react-markdown + plugins de sintaxis
-//   4. Muestra estados de loading y error
-//
-// Librerías:
-//   react-markdown     → convierte string Markdown a JSX
-//   remark-gfm         → habilita tablas, listas de tareas, etc.
-//   rehype-highlight   → resaltado de sintaxis en bloques de código
-// ─────────────────────────────────────────────────────────────
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Link } from "react-router-dom";
 
-// ── Mapa de slugs a imports dinámicos ─────────────────────────
-// Vite necesita conocer los archivos en tiempo de build,
-// por eso no podemos hacer import(`../content/${slug}.md`)
-// directamente — tenemos que listar los imports posibles.
-// ?raw → importa el archivo como string puro (no como módulo)
+// ── Orden explícito de las lecciones ──────────────────────────
+// Usamos un array separado porque los objetos JS no garantizan
+// orden. Este array define qué lección es "anterior" y cuál es
+// "siguiente" para cada slug.
+const DOCS_ORDER = ["introduccion", "Layoutdiseño", "avanzado"];
 
 const DOCS = {
   introduccion: () => import("../../content/guia_css_1.md?raw"),
@@ -30,7 +16,6 @@ const DOCS = {
 };
 
 const MD_COMPONENTS = {
-  // Títulos
   h1: ({ children }) => (
     <h1 className="text-3xl font-bold text-white mt-0 mb-4 pb-4 border-b border-white/[0.08]">
       {children}
@@ -46,13 +31,9 @@ const MD_COMPONENTS = {
       {children}
     </h3>
   ),
-
-  // Párrafo
   p: ({ children }) => (
     <p className="text-white/60 leading-7 mb-4 text-[15px]">{children}</p>
   ),
-
-  // Código inline: `color: red`
   code: ({ inline, className, children }) => {
     if (inline) {
       return (
@@ -61,40 +42,29 @@ const MD_COMPONENTS = {
         </code>
       );
     }
-    // Bloque de código (con lenguaje)
     return <code className={`${className} block`}>{children}</code>;
   },
-
-  // Bloque de código completo
   pre: ({ children }) => (
     <pre className="bg-[#161616] border border-white/[0.08] rounded-lg p-5 overflow-x-auto mb-6 text-[13px] font-mono leading-6">
       {children}
     </pre>
   ),
-
-  // Lista desordenada
   ul: ({ children }) => (
     <ul className="text-white/60 mb-4 space-y-1.5 pl-5 list-none">
       {children}
     </ul>
   ),
-
-  // Lista ordenada
   ol: ({ children }) => (
     <ol className="text-white/60 mb-4 space-y-1.5 pl-5 list-decimal">
       {children}
     </ol>
   ),
-
-  // Item de lista
   li: ({ children }) => (
     <li className="flex gap-2 text-[15px] leading-6">
       <span className="text-[#264de4] mt-2 shrink-0 w-1 h-1 rounded-full bg-[#264de4] relative top-2.5" />
       <span>{children}</span>
     </li>
   ),
-
-  // Blockquote → tip/nota destacada
   blockquote: ({ children }) => (
     <blockquote className="border-l-2 border-[#264de4] bg-[#264de4]/[0.06] px-5 py-3 rounded-r-lg mb-4">
       <div className="text-white/70 text-[14px] leading-6 [&>p]:mb-0 [&>p]:text-white/70">
@@ -102,8 +72,6 @@ const MD_COMPONENTS = {
       </div>
     </blockquote>
   ),
-
-  // Tabla (GFM)
   table: ({ children }) => (
     <div className="overflow-x-auto mb-6">
       <table className="w-full text-sm border-collapse">{children}</table>
@@ -122,29 +90,22 @@ const MD_COMPONENTS = {
       {children}
     </td>
   ),
-
-  // Links
   a: ({ href, children }) => (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[#264de4] hover:text-[#5580ff] underline underline-offset-2 transition-colors"
+      className="text-[#264de4] hover:underline"
     >
       {children}
     </a>
   ),
-
-  // Separador
   hr: () => <hr className="border-white/[0.06] my-8" />,
-
-  // Strong
   strong: ({ children }) => (
     <strong className="text-white font-semibold">{children}</strong>
   ),
 };
 
-// ── Skeleton de carga ─────────────────────────────────────────
 function LoadingSkeleton() {
   return (
     <div className="animate-pulse space-y-4 max-w-3xl">
@@ -160,11 +121,85 @@ function LoadingSkeleton() {
   );
 }
 
+// ── Botones de navegación entre lecciones ─────────────────────
+// Recibe prevSlug y nextSlug (pueden ser null si no existen).
+// Solo renderiza el botón si el slug correspondiente no es null.
+// justify-end → alinea los botones a la derecha.
+// Si hay ambos botones, justify-between los separa a los extremos.
+function NavButtons({ prevSlug, nextSlug }) {
+  const hasBoth = prevSlug && nextSlug;
+
+  return (
+    <div
+      className={`flex mt-16 pt-6 border-t  border-white/6 ${
+        hasBoth ? "justify-between" : "justify-end"
+      }`}
+    >
+      {/* Botón anterior: solo se muestra si prevSlug no es null */}
+      {prevSlug && (
+        <Link
+          to={`/docs/${prevSlug}`}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/8 text-white/50 hover:text-white hover:border-white/2 shadow-md shadow-white/4 text-sm hover:shadow-md hover:shadow-white/6 transition-colors group"
+        >
+          {/* Flecha izquierda */}
+          <svg
+            className="w-4 h-4 transition-transform group-hover:-translate-x-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Lección anterior
+        </Link>
+      )}
+
+      {/* Botón siguiente: solo se muestra si nextSlug no es null */}
+      {nextSlug && (
+        <Link
+          to={`/docs/${nextSlug}`}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg border duration-200 border-blue-400/40 shadow-sm shadow-blue-400/20 hover:border-blue-400/70 hover:shadow-md hover:shadow-blue-400/30 text-sm transition-colors group"
+        >
+          Siguiente lección
+          {/* Flecha derecha */}
+          <svg
+            className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </Link>
+      )}
+    </div>
+  );
+}
+
 // ── Componente principal ──────────────────────────────────────
 export default function DocContent({ slug }) {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  // ── Calcular lecciones anterior y siguiente ────────────────
+  // Buscamos el índice del slug actual en el array de orden.
+  // Si currentIndex es 0, no hay anterior (prevSlug = null).
+  // Si currentIndex es el último, no hay siguiente (nextSlug = null).
+  const currentIndex = DOCS_ORDER.indexOf(slug);
+  const prevSlug = currentIndex > 0 ? DOCS_ORDER[currentIndex - 1] : null;
+  const nextSlug =
+    currentIndex < DOCS_ORDER.length - 1 ? DOCS_ORDER[currentIndex + 1] : null;
 
   useEffect(() => {
     setLoading(true);
@@ -172,17 +207,14 @@ export default function DocContent({ slug }) {
 
     const loader = DOCS[slug];
 
-    // Si el slug no existe en nuestro mapa, mostramos error
     if (!loader) {
       setLoading(false);
       setError(true);
       return;
     }
 
-    // Cargamos el archivo .md dinámicamente
     loader()
       .then((module) => {
-        // module.default es el contenido del archivo como string
         setContent(module.default);
         setLoading(false);
       })
@@ -190,11 +222,9 @@ export default function DocContent({ slug }) {
         setLoading(false);
         setError(true);
       });
-  }, [slug]); // Se re-ejecuta cada vez que cambia el slug
+  }, [slug]);
 
   return (
-    // max-w-3xl → limita el ancho del texto a ~768px (legibilidad óptima)
-    // mx-auto → centra el contenido
     <div className="max-w-3xl mx-auto px-8 py-10">
       {loading && <LoadingSkeleton />}
 
@@ -216,12 +246,15 @@ export default function DocContent({ slug }) {
       )}
 
       {!loading && !error && (
-        // prose → clase de Tailwind Typography (si lo instalás)
-        // Por ahora usamos nuestros MD_COMPONENTS para los estilos
-        <div className="docs-content">
+        <div className="docs-content ">
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD_COMPONENTS}>
             {content}
           </ReactMarkdown>
+
+          {/* ── Navegación entre lecciones ───────────────────
+              Se pasan prevSlug y nextSlug; el componente decide
+              cuáles mostrar según cuáles no son null.           */}
+          <NavButtons prevSlug={prevSlug} nextSlug={nextSlug} />
         </div>
       )}
     </div>

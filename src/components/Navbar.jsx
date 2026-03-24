@@ -1,21 +1,14 @@
-// ─────────────────────────────────────────────────────────────
-// Navbar.jsx — Barra de navegación global
-//
-// Se usa en Home y en Docs.
-// Recibe prop `transparent` para el hero (fondo transparente)
-// y sin prop para docs (fondo sólido oscuro).
-// ─────────────────────────────────────────────────────────────
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-// ── Links internos (React Router) ────────────────────────────
+// ── Links internos (React Router)
 const INTERNAL_LINKS = [
   { label: "Inicio", to: "/" },
   { label: "Documentación", to: "/docs" },
   { label: "Herramientas", to: "/herramientas" },
 ];
 
-// ── Links externos ────────────────────────────────────────────
+// ── Links externos
 const EXTERNAL_LINKS = [
   {
     label: "YouTube",
@@ -87,7 +80,7 @@ export default function Navbar({ transparent = false }) {
       <nav
         className={`
         fixed top-0 left-0 right-0 z-50
-        flex items-center justify-between
+        flex items-center 
         px-6 md:px-10 h-14
         transition-all duration-300
         ${
@@ -109,13 +102,13 @@ export default function Navbar({ transparent = false }) {
           </div>
         </Link>
 
-        {/* ── Links centrales (desktop) ─────────────────── */}
-        <div className="hidden md:flex items-center gap-1">
-          {INTERNAL_LINKS.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`
+        <div className="ml-auto flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-1">
+            {INTERNAL_LINKS.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`
                 px-3 py-1.5 rounded-md text-sm transition-colors duration-150
                 ${
                   isActive(link.to)
@@ -123,58 +116,59 @@ export default function Navbar({ transparent = false }) {
                     : "text-white/45 hover:text-white/80 hover:bg-white/[0.04]"
                 }
               `}
-            >
-              {link.label}
-            </Link>
-          ))}
+              >
+                {link.label}
+              </Link>
+            ))}
 
-          {/* Separador */}
-          <div className="w-px h-4 bg-white/[0.1] mx-1" />
+            {/* Separador */}
+            <div className="w-px h-5 bg-white/15 mx-1.5" />
 
-          {/* Links externos */}
-          {EXTERNAL_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
+            {/* Links externos */}
+            {EXTERNAL_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
                 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm
                 text-white/35 hover:text-white/70 hover:bg-white/[0.04]
                 transition-colors duration-150
               "
-            >
-              {link.icon}
-              {link.label}
-              {/* Ícono de link externo */}
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                className="opacity-50"
               >
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15,3 21,3 21,9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
-          ))}
-        </div>
+                {link.icon}
+                {link.label}
+                {/* Ícono de link externo */}
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="opacity-50"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15,3 21,3 21,9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+            ))}
+          </div>
 
-        {/* ── Botón derecho + hamburguesa (mobile) ─────── */}
-        <div className="flex items-center gap-3">
-          {/* Hamburguesa en mobile */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-white/50 hover:text-white transition-colors p-1"
-            aria-label="Menú"
-          >
-            <IconMenu open={menuOpen} />
-          </button>
+          {/* ── Botón derecho + hamburguesa (mobile) ─────── */}
+          <div className="flex items-center gap-3">
+            {/* Hamburguesa en mobile */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-white/50 hover:text-white transition-colors p-1"
+              aria-label="Menú"
+            >
+              <IconMenu open={menuOpen} />
+            </button>
+          </div>
         </div>
       </nav>
 

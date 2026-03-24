@@ -1,14 +1,8 @@
-// ─────────────────────────────────────────────────────────────
-// Sidebar.jsx — Navegación lateral de la documentación
-//
 // Recibe currentSlug para resaltar el ítem activo.
 // Usa <Link> de React Router en lugar de <a> para navegar
 // sin recargar la página (SPA navigation).
-// ─────────────────────────────────────────────────────────────
 import { Link } from "react-router-dom";
 
-// ── Estructura de la documentación ───────────────────────────
-// Cada sección tiene un título y una lista de páginas.
 // El `slug` debe coincidir con el nombre del archivo en /content/
 const NAV = [
   {
@@ -62,14 +56,31 @@ const NAV = [
   },
 ];
 
-export default function Sidebar({ currentSlug }) {
+export default function Sidebar({ currentSlug, sidebarOpen, setSidebarOpen }) {
   return (
-    // h-full → ocupa toda la altura del aside
-    // overflow-y-auto → scroll si hay muchos items
-    // border-r → línea divisoria con el contenido
-    <div className="h-full overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] flex flex-col">
-      {/* ── Navegación ────────────────────────────────────── */}
-      <nav className="flex-1 px-3 py-4">
+    <div className="h-full overflow-y-auto border-r border-white/6 bg-[#0a0a0a] flex flex-col">
+      <div className="px-3 py-4 border-b border-white/6 flex justify-center">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-md bg-white/4 hover:bg-white/8 transition-colors"
+        >
+          <svg
+            className={`w-5 h-5 text-white/60 transition-transform ${sidebarOpen ? "" : "rotate-180"}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav className={`flex-1 px-3 py-4 ${sidebarOpen ? "" : "hidden"}`}>
         {NAV.map((group) => (
           <div key={group.section} className="mb-5">
             {/* Título de sección (no es un link) */}
@@ -90,10 +101,8 @@ export default function Sidebar({ currentSlug }) {
                         transition-all duration-150
                         ${
                           isActive
-                            ? // Activo: fondo azul tenue + texto blanco
-                              "bg-[#264de4]/15 text-white"
-                            : // Inactivo: texto gris, hover claro
-                              "text-white/45 hover:text-white/80 hover:bg-white/[0.04]"
+                            ? "bg-[#264de4]/15 text-white"
+                            : "text-white/45 hover:text-white/80 hover:bg-white/4"
                         }
                       `}
                     >
@@ -110,10 +119,6 @@ export default function Sidebar({ currentSlug }) {
           </div>
         ))}
       </nav>
-      {/* 
-      <div className="px-5 py-4 border-t border-white/[0.06]">
-        <p className="text-white/20 text-[11px]">CSS Reference v1.0</p>
-      </div> */}
     </div>
   );
 }

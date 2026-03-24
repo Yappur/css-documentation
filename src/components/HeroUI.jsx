@@ -49,20 +49,28 @@ export default function HeroUI() {
         {/* Logo 3D */}
         {/* MOBILE: altura fija razonable, sin min-h que compita */}
         {/* DESKTOP: flex-1 ocupa toda la mitad derecha con altura completa */}
-        <div className="w-full h-[280px] md:flex-1 md:h-auto overflow-hidden">
+        <div className="w-full h-70 md:flex-1 md:h-auto overflow-hidden">
           <Scene3D />
         </div>
       </div>
 
       {/* ── Footer ── */}
-      <footer className="flex items-end justify-between px-10 pb-8 opacity-0-init animate-fade-up delay-500 pointer-events-none">
-        <span className="font-body text-white/80 text-xs tracking-widest uppercase">
-          Hecho con 💙 por Mateo Yapur
+      <footer className="flex items-end justify-between px-10 pb-6 opacity-0-init animate-fade-up delay-500 pointer-events-none tracking-widest uppercase">
+        <span className="text-white/80 text-xs">
+          Hecho con 💙 por{" "}
+          <a
+            href="https://www.linkedin.com/in/mateoyapur/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:underline cursor-pointer pointer-events-auto"
+          >
+            Mateo Yapur
+          </a>
         </span>
         <div className="pointer-events-auto flex items-center gap-3">
           <Link
             to="/docs"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#264de4] hover:bg-[#3357f5] text-white text-sm font-medium font-body transition-all duration-200 hover:shadow-[0_0_20px_rgba(38,77,228,0.4)] hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-5 py-3 duration-200 text-white rounded-2xl border border-blue-400/40 shadow-md shadow-blue-400/20 hover:border-blue-400/70 hover:shadow-lg hover:shadow-blue-400/30 text-sm transition-colors group"
           >
             Ver documentación
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
