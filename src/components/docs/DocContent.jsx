@@ -7,12 +7,39 @@ import { Link } from "react-router-dom";
 // Usamos un array separado porque los objetos JS no garantizan
 // orden. Este array define qué lección es "anterior" y cuál es
 // "siguiente" para cada slug.
-const DOCS_ORDER = ["introduccion", "Layoutdiseño", "avanzado"];
+const DOCS_ORDER = [
+  "introduccion",
+  "conectar_html_a_css",
+  "selectores_basicos",
+  "especificidad",
+  "colores",
+  "tipografias",
+  "box_model",
+  "unidades",
+  "flexbox",
+  "flexbox_avanzado",
+  "pseudo_clases",
+  "pseudo_elementos",
+  "responsive_design",
+  "mobile_first",
+];
 
 const DOCS = {
-  introduccion: () => import("../../content/guia_css_1.md?raw"),
-  Layoutdiseño: () => import("../../content/guia_css_2.md?raw"),
-  avanzado: () => import("../../content/guia_css_3.md?raw"),
+  introduccion: () => import("../../content/1_introduccion.md?raw"),
+  conectar_html_a_css: () => import("../../content/2_conectar_html_a_css.md?raw"),
+  selectores_basicos: () => import("../../content/3_selectores_basicos.md?raw"),
+  especificidad: () => import("../../content/4_especificidad.md?raw"),
+  colores: () => import("../../content/2_colores.md?raw"),
+  tipografias: () => import("../../content/3_tipografias.md?raw"),
+
+  box_model: () => import("../../content/_box_model.md?raw"),
+  unidades: () => import("../../content/4_unidades.md?raw"),
+  flexbox: () => import("../../content/flexbox.md?raw"),
+  flexbox_avanzado: () => import("../../content/flexbox_avanzado.md?raw"),
+  pseudo_clases: () => import("../../content/pseudo_clases.md?raw"),
+  pseudo_elementos: () => import("../../content/pseudo_elementos.md?raw"),
+  responsive_design: () => import("../../content/responsive_design.md?raw"),
+  mobile_first: () => import("../../content/mobile_first.md?raw"),
 };
 
 const MD_COMPONENTS = {
@@ -42,27 +69,32 @@ const MD_COMPONENTS = {
         </code>
       );
     }
-    return <code className={`${className} block`}>{children}</code>;
+    return (
+      <code
+        className={`${className ?? ""} block w-full bg-transparent p-0 text-[13px] font-mono text-white/85 leading-6`}
+      >
+        {children}
+      </code>
+    );
   },
   pre: ({ children }) => (
-    <pre className="bg-[#161616] border border-white/8 rounded-lg p-5 overflow-x-auto mb-6 text-[13px] font-mono leading-6">
+    <pre className="bg-[#161616] border border-white/8 rounded-lg p-5 overflow-x-auto mb-6 text-[13px] font-mono leading-6 [&>code]:whitespace-pre">
       {children}
     </pre>
   ),
   ul: ({ children }) => (
-    <ul className="text-white/60 mb-4 space-y-1.5 pl-5 list-none">
+    <ul className="text-white/60 mb-4 space-y-1.5 pl-5 list-disc marker:text-[#264de4] text-[15px] leading-7 [&_ul]:mt-1.5 [&_ol]:mt-1.5">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="text-white/60 mb-4 space-y-1.5 pl-5 list-decimal">
+    <ol className="text-white/60 mb-4 space-y-1.5 pl-5 list-decimal marker:text-white/40 text-[15px] leading-7 [&_ul]:mt-1.5 [&_ol]:mt-1.5">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="flex gap-2 text-[15px] leading-6">
-      <span className="text-[#264de4] mt-2 shrink-0 w-1 h-1 rounded-full bg-[#264de4] relative top-2.5" />
-      <span>{children}</span>
+    <li className="pl-1 text-[15px] leading-7 marker:text-inherit [&>p]:mb-2 [&>p:last-child]:mb-0">
+      {children}
     </li>
   ),
   blockquote: ({ children }) => (
@@ -80,13 +112,15 @@ const MD_COMPONENTS = {
   thead: ({ children }) => (
     <thead className="border-b border-white/10">{children}</thead>
   ),
+  tbody: ({ children }) => <tbody>{children}</tbody>,
+  tr: ({ children }) => <tr>{children}</tr>,
   th: ({ children }) => (
-    <th className="text-left py-2 px-4 text-white/50 text-[11px] uppercase tracking-wider font-medium">
+    <th className="text-left py-2 px-4 text-white/50 text-[11px] uppercase tracking-wider font-medium [&_code]:text-[11px] [&_code]:uppercase">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="py-2.5 px-4 text-white/60 text-[14px] border-b border-white/4">
+    <td className="py-2.5 px-4 text-white/60 text-[14px] border-b border-white/4 align-top [&_code]:text-[13px]">
       {children}
     </td>
   ),

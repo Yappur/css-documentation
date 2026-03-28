@@ -7,51 +7,44 @@ import { Link } from "react-router-dom";
 const NAV = [
   {
     section: "Introducción",
-    items: [
-      { slug: "introduccion", label: "Qué es CSS" },
-      { slug: "como-funciona", label: "Cómo funciona" },
-    ],
+    items: [{ slug: "introduccion", label: "Qué es CSS" }, { slug: "conectar_html_a_css", label: "Conectar CSS con HTML" }],
   },
   {
     section: "Selectores",
     items: [
-      { slug: "selectores-basicos", label: "Selectores básicos" },
-      { slug: "selectores-combinados", label: "Selectores combinados" },
-      { slug: "pseudoclases", label: "Pseudoclases" },
-      { slug: "pseudoelementos", label: "Pseudoelementos" },
-    ],
-  },
-  {
-    section: "Caja y layout",
-    items: [
-      { slug: "box-model", label: "Box model" },
-      { slug: "flexbox", label: "Flexbox" },
-      { slug: "grid", label: "CSS Grid" },
-      { slug: "posicion", label: "Position" },
-    ],
-  },
-  {
-    section: "Tipografía",
-    items: [
-      { slug: "fuentes", label: "Fuentes y font-face" },
-      { slug: "texto", label: "Propiedades de texto" },
+      { slug: "selectores_basicos", label: "Selectores básicos" },
+      { slug: "especificidad", label: "Especificidad" },
     ],
   },
   {
     section: "Visual",
     items: [
       { slug: "colores", label: "Colores y variables" },
-      { slug: "gradientes", label: "Gradientes" },
-      { slug: "sombras", label: "Sombras" },
-      { slug: "animaciones", label: "Transiciones y animaciones" },
+      { slug: "tipografias", label: "Tipografías" },
+      // { slug: "gradientes", label: "Gradientes" },
+      // { slug: "sombras", label: "Sombras" },
+      // { slug: "animaciones", label: "Transiciones y animaciones" },
+    ],
+  },
+  
+  {
+    section: "Caja y layout",
+    items: [
+      { slug: "box_model", label: "Box model" },
+      { slug: "unidades", label: "Unidades" },
+      { slug: "flexbox", label: "Flexbox" },
+      { slug: "flexbox_avanzado", label: "Flexbox Avanzado" },
+      // { slug: "grid", label: "CSS Grid" },
+      // { slug: "posicion", label: "Position" },
     ],
   },
   {
     section: "Avanzado",
     items: [
-      { slug: "custom-properties", label: "Custom Properties" },
-      { slug: "media-queries", label: "Media Queries" },
-      { slug: "container-queries", label: "Container Queries" },
+      { slug: "pseudo_clases", label: "Pseudo-clases" },
+      { slug: "pseudo_elementos", label: "Pseudo-elementos" },
+      { slug: "responsive_design", label: "Responsive" },
+      { slug: "mobile_first", label: "Mobile First" },
     ],
   },
 ];
