@@ -21,9 +21,9 @@ const NAV = [
     items: [
       { slug: "colores", label: "Colores y variables" },
       { slug: "tipografias", label: "Tipografías" },
-      // { slug: "gradientes", label: "Gradientes" },
-      // { slug: "sombras", label: "Sombras" },
-      // { slug: "animaciones", label: "Transiciones y animaciones" },
+      { slug: "gradientes", label: "Gradientes" },
+      { slug: "sombras", label: "Sombras" },
+      { slug: "animaciones", label: "Transiciones y animaciones" },
     ],
   },
   
@@ -34,8 +34,9 @@ const NAV = [
       { slug: "unidades", label: "Unidades" },
       { slug: "flexbox", label: "Flexbox" },
       { slug: "flexbox_avanzado", label: "Flexbox Avanzado" },
-      // { slug: "grid", label: "CSS Grid" },
-      // { slug: "posicion", label: "Position" },
+      
+      { slug: "position", label: "Position" },
+      { slug: "grid", label: "CSS Grid" },
     ],
   },
   {
